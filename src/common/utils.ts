@@ -43,5 +43,5 @@ export const isCloseTime = (time: string) => {
   if (!isSameDay) {
     return false; // 如果传入时间不是当天，则直接返回false
   }
-  return isWithinTimeRange(targetTime, 19, 22)
+  return isWithinTimeRange(targetTime, 15, 22)
 }
