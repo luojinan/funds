@@ -1,4 +1,7 @@
-export const defaultWatchFundList = ['004424','000968'] // TODO: 表单输入，及json修改
+export const defaultWatchFundList = [
+  {code: '004424', buyinWorth: 1.9262, watchWorth: ''},
+  {code: '000968', buyinWorth: 0.9195, watchWorth: ''}
+] // TODO: 表单输入，及json修改
 
 // 获取当前日期并格式化
 function getCurrentFormattedDate() {

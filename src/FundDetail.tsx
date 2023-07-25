@@ -1,5 +1,6 @@
 import { Detail } from "@raycast/api";
 import { FundData } from "./types";
+import { isDown } from "./common/utils";
 
 interface Props {
   fundData: FundData
@@ -28,7 +29,7 @@ const showList = {
 const getEmoji = (value: string) => {
   // 没找到自定义样式的办法，使用 emoji
   let emoji = '🥳'
-  if(value.startsWith('-')) {
+  if(isDown(value)) {
     emoji = '🤢'
   }
   return emoji

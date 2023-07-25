@@ -4,17 +4,40 @@ import { defaultWatchFundList } from "./common/const";
 import FundDetail from "./FundDetail";
 import { FundData } from "./types";
 import { getFundListWithCache } from "./common/request";
+import { getUpDownPercent, isDown } from "./common/utils";
 
 interface FundItem {
   code: string;
   detail: FundData | null;
 }
 
-const list: FundItem[] = defaultWatchFundList.map((code) => ({ code, detail: null }));
+const initList: FundItem[] = defaultWatchFundList.map((item) => ({ code: item.code, detail: null }));
 
 export default function Command() {
-  const [fundList, setFundList] = useState(list);
+  const [fundList, setFundList] = useState(initList);
   const [isLoading, setIsLoading] = useState(true);
+
+  const getTagList = (fundItem: FundItem) => {
+    if(!fundItem.detail) return []
+    const tagKeys = ['dayGrowth','expectGrowth'] as const
+    const tagList = tagKeys.map(key=>({
+      tag: {
+        value: `${key === 'expectGrowth'?'估':''}${fundItem.detail?.[key]}%`,
+        color: isDown(fundItem.detail?.[key]) ? Color.Green : Color.Red,
+      },
+    }))
+    const hasButInWorthItem = defaultWatchFundList.find(item=> fundItem.code === item.code && !!item.buyinWorth)
+    if(hasButInWorthItem) {
+      const res = getUpDownPercent({newWorth: fundItem.detail.expectWorth, oldWorth: hasButInWorthItem.buyinWorth})
+      tagList.push({
+        tag: {
+          value: `${res}%`,
+          color: isDown(res) ? Color.Green : Color.Red,
+        }
+      })
+    }
+    return tagList
+  }
 
   useEffect(() => {
     (async () => {
@@ -24,8 +47,6 @@ export default function Command() {
     })();
   }, []);
 
-  const isUp = (value: string) => value.startsWith("-");
-
   return (
     <List isLoading={isLoading}>
       {fundList.map((fundItem, index) => (
@@ -33,24 +54,7 @@ export default function Command() {
           key={index}
           title={fundItem.detail?.name || ""}
           // 1.昨日净值涨幅 2.今日估值涨幅
-          accessories={
-            fundItem.detail
-              ? [
-                  {
-                    tag: {
-                      value: `${fundItem.detail.dayGrowth}%`,
-                      color: isUp(fundItem.detail.dayGrowth) ? Color.Green : Color.Red,
-                    },
-                  },
-                  {
-                    tag: {
-                      value: `估:${fundItem.detail.expectGrowth}%`,
-                      color: isUp(fundItem.detail.expectGrowth) ? Color.Green : Color.Red,
-                    },
-                  },
-                ]
-              : []
-          }
+          accessories={getTagList(fundItem)}
           subtitle={fundItem.code}
           actions={
             <ActionPanel>

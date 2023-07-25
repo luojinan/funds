@@ -6,7 +6,7 @@ import { Toast, showToast } from "@raycast/api";
 
 // TODO: 提供刷新按钮
 export const getFundList = () => {
-  const api = `${API_FUND_DETAIL}${defaultWatchFundList.join(',')}`
+  const api = `${API_FUND_DETAIL}${defaultWatchFundList.map(item=>item.code).join(',')}`
   return fetch(api).then(item=> item.json()) as Promise<{data: FundData[]}>
 }
 
@@ -14,11 +14,11 @@ export const getFundListWithCache = async () => {
   // 判断缓存
   const cacheFundList = getCache(CACHE_KEY_FUNDLIST) || []
   if(cacheFundList.length) {
-    // 当天下午3点到晚10点 取缓存 不调接口(晚10点后净值更新) 
+    // 当天下午3点到晚8点 取缓存 不调接口(晚8点后净值更新) 
     if(isCloseTime(cacheFundList[0].detail.expectWorthDate)) {
       showToast({
         title: "来源缓存",
-        message: "晚10点后更新净值",
+        message: "晚8点后更新净值",
       });
       return cacheFundList
     }
@@ -29,6 +29,7 @@ export const getFundListWithCache = async () => {
     setCache(CACHE_KEY_FUNDLIST, list)
     return list
   } catch (error) {
+    console.log(error)
     showToast({
       style: Toast.Style.Failure,
       title: '接口加载失败',
