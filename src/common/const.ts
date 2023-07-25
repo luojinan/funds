@@ -18,3 +18,6 @@ const HOST = 'https://api.doctorxiong.club/v1'
 export const API_FUND_DETAIL = `${HOST}/fund/detail/list?startDate=${currentDate}&code=`
 
 // export const API_FUND_LIST = `${HOST}/fund/detailfund/detail?code=`
+
+
+export const CACHE_KEY_FUNDLIST = 'fund-list'

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { defaultWatchFundList } from "./common/const";
 import FundDetail from "./FundDetail";
 import { FundData } from "./types";
-import { getFundList } from "./common/request";
+import { getFundListWithCache } from "./common/request";
 
 interface FundItem {
   code: string;
@@ -18,8 +18,8 @@ export default function Command() {
 
   useEffect(() => {
     (async () => {
-      const {data} = await getFundList()
-      setFundList(data.map(item => ({code: item.code, detail: item})))
+      const list = await getFundListWithCache()
+      setFundList(list)
       setIsLoading(false)
     })();
   }, []);

@@ -1,10 +1,40 @@
-import { API_FUND_DETAIL, defaultWatchFundList } from "./const";
+import { API_FUND_DETAIL, CACHE_KEY_FUNDLIST, defaultWatchFundList } from "./const";
 import fetch from "node-fetch";
 import { FundData } from "../types";
+import { getCache, isCloseTime, setCache } from "./utils";
+import { Toast, showToast } from "@raycast/api";
 
+// TODO: 提供刷新按钮
 export const getFundList = () => {
   const api = `${API_FUND_DETAIL}${defaultWatchFundList.join(',')}`
   return fetch(api).then(item=> item.json()) as Promise<{data: FundData[]}>
+}
+
+export const getFundListWithCache = async () => {
+  // 判断缓存
+  const cacheFundList = getCache(CACHE_KEY_FUNDLIST) || []
+  if(cacheFundList.length) {
+    // 当天下午3点到晚10点 取缓存 不调接口(晚10点后净值更新) 
+    if(isCloseTime(cacheFundList[0].detail.expectWorthDate)) {
+      showToast({
+        title: "来源缓存",
+        message: "晚10点后更新净值",
+      });
+      return cacheFundList
+    }
+  }
+  try {
+    const {data} = await getFundList()
+    const list = data.map(item => ({code: item.code, detail: item}))
+    setCache(CACHE_KEY_FUNDLIST, list)
+    return list
+  } catch (error) {
+    showToast({
+      style: Toast.Style.Failure,
+      title: '接口加载失败',
+    })
+    return []
+  }
 }
 
 // const getFundListOneByOne = () => {
