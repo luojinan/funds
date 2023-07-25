@@ -2,7 +2,7 @@ import { Detail } from "@raycast/api";
 import { FundData } from "./types";
 
 interface Props {
-  fundData: FundData
+  fundData: FundData | null
 }
 
 export default function FundDetail({fundData}: Props) {

@@ -1,47 +1,33 @@
-import { Action, ActionPanel, Color, Detail, List } from "@raycast/api";
+import { Action, ActionPanel, Color, List } from "@raycast/api";
 import { useEffect, useState } from "react";
-import fetch from "node-fetch";
-import { API_FUND_DETAIL, defaultWatchFundList } from "./common/const";
+import { defaultWatchFundList } from "./common/const";
 import FundDetail from "./FundDetail";
 import { FundData } from "./types";
+import { getFundList } from "./common/request";
 
 interface FundItem {
   code: string;
   detail: FundData | null;
 }
 
+const list: FundItem[] = defaultWatchFundList.map((code) => ({ code, detail: null }));
 
 export default function Command() {
-  const [fundList, setFundList] = useState<FundItem[]>([]);
+  const [fundList, setFundList] = useState(list);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const list: FundItem[] = defaultWatchFundList.map((code) => ({ code, detail: null }));
-      setFundList(list);
-      try {
-        for (let i = 0; i < list.length; i++) {
-          const { code } = list[i];
-          const fundRes = await fetch(`${API_FUND_DETAIL}${code}`).then((item) => item.json());
-          const { data } = fundRes as { data: FundData };
-          const res = list.map((item) => {
-            if (item.code === data.code) {
-              item.detail = data;
-            }
-            return item;
-          });
-          setFundList(res);
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      const {data} = await getFundList()
+      setFundList(data.map(item => ({code: item.code, detail: item})))
+      setIsLoading(false)
     })();
   }, []);
 
   const isUp = (value: string) => value.startsWith("-");
 
-  // TODO: 排序
   return (
-    <List>
+    <List isLoading={isLoading}>
       {fundList.map((fundItem, index) => (
         <List.Item
           key={index}
