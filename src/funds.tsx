@@ -53,7 +53,7 @@ export default function Command() {
         <List.Item
           key={index}
           title={fundItem.detail?.name || ""}
-          // 1.昨日净值涨幅 2.今日估值涨幅
+          // 1.昨日净值涨幅 2.今日估值涨幅 3.买入后涨幅(使用估值计算)
           accessories={getTagList(fundItem)}
           subtitle={fundItem.code}
           actions={

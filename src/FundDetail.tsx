@@ -6,7 +6,6 @@ interface Props {
   fundData: FundData
 }
 
-// TODO: 录入已经买入的值 并 根据 涨/跌幅提示买入/卖出
 const showList = {
   worthDate: '净值更新日期',
   netWorth: '当前基金单位净值',
@@ -63,6 +62,9 @@ export default function FundDetail({fundData}: Props) {
           <Detail.Metadata.Label title="基金名称" text={fundData.name} />
           <Detail.Metadata.Label title="基金类型" text={fundData.type} />
           <Detail.Metadata.Label title="基金规模及日期" text={fundData.fundScale} />
+          {/* 买入涨跌幅 */}
+          {/* 距离关注点涨跌幅 */}
+          {/* 注意：并不是净值低时就是好的买入节点，净值高就不买，而是关注未来成长空间 */}
         </Detail.Metadata>
       }
     />

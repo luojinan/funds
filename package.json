@@ -12,6 +12,12 @@
       "title": "funds",
       "description": "watch funds info",
       "mode": "view"
+    },
+    {
+      "name": "addMyFund",
+      "title": "addMyFund",
+      "description": "add funds info",
+      "mode": "view"
     }
   ],
   "dependencies": {
