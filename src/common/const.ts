@@ -4,7 +4,6 @@ export const defaultWatchFundList = [
   {code: '003765', buyinWorth: 1.1535, watchWorth: ''},
   {code: '011612', buyinWorth: 0.7017, watchWorth: ''},
   {code: '004752', buyinWorth: 0.8289, watchWorth: ''},
-  {code: '003765', buyinWorth: 1.1778, watchWorth: ''},
   {code: '000478', buyinWorth: 2.6115, watchWorth: ''},
   {code: '001180', buyinWorth: 0.8707, watchWorth: ''},
   {code: '519915', buyinWorth: 2.3520, watchWorth: ''},

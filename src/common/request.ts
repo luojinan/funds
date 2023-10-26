@@ -25,6 +25,8 @@ export const getFundListWithCache = async () => {
   }
   try {
     const {data} = await getFundList()
+    // 根据估值排序
+    data.sort((a, b) => +a.expectGrowth - (+b.expectGrowth));
     const list = data.map(item => ({code: item.code, detail: item}))
     setCache(CACHE_KEY_FUNDLIST, list)
     return list
