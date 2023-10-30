@@ -21,6 +21,7 @@
     }
   ],
   "dependencies": {
+    "@inkdropapp/html2markdown": "^3.2.1",
     "@raycast/api": "^1.55.1",
     "node-fetch": "^3.3.1"
   },
