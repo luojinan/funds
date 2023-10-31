@@ -30,7 +30,7 @@ export default function Command() {
           subtitle={item?.time}
           actions={
             <ActionPanel>
-              <Action.Push title="Detail Info" target={<ZoyeDetail path={item.path} />} />
+              <Action.Push title="Detail Info" target={<ZoyeDetail path={item.path} title={item.title} />} />
             </ActionPanel>
           }
         />

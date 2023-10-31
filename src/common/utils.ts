@@ -96,7 +96,6 @@ export const getInfoByStr = (input: string): any => {
       path: path
     };
 
-    console.log(jsonData)
     return jsonData;
   }
 
