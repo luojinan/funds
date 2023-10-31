@@ -1,4 +1,5 @@
 import { Cache } from "@raycast/api"
+import { html2Markdown } from '@inkdropapp/html2markdown'
 
 const cache = new Cache()
 
@@ -61,4 +62,43 @@ export const getUpDownPercent = ({newWorth,oldWorth}: {newWorth: number,oldWorth
   const temp = ((newWorth - oldWorth) / oldWorth) * 100 // 单位换算
   const fixedNum = Math.round(temp * 100) / 100 // 四舍五入
   return fixedNum.toFixed(2) // 保留2位小数
+}
+/**
+ * 去除列表中的置顶公告
+ * @param htmlStr 
+ * @returns 
+ */
+export const removeTop = (htmlStr: string) => {
+  const regex = /<li class="article-list top">.*?<\/li>/g;
+  const result = htmlStr.replace(regex, '');
+  return result;
+}
+
+export const getMdByRegex = (str: string, regex)=> {
+  const [matches] = str.match(regex) || [];
+  const htmlStr = removeTop(matches)
+  const markdownString = html2Markdown(htmlStr);
+  return markdownString
+}
+
+export const getInfoByStr = (input: string): any => {
+  const regex = /- (\d{2}:\d{2})\*\*(.*?)\]\((.*?)\)/;
+  const match = input.match(regex);
+
+  if (match) {
+    const time = match[1];
+    const title = match[2].replace(/^\d+\[?/g, "");
+    const [path] = match[3].match(/(.*html)/);
+
+    const jsonData = {
+      time: time,
+      title: title,
+      path: path
+    };
+
+    console.log(jsonData)
+    return jsonData;
+  }
+
+  return {}; // 如果未找到匹配项，返回null或其他适当的错误处理
 }

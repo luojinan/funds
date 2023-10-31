@@ -18,6 +18,12 @@
       "title": "addMyFund",
       "description": "add funds info",
       "mode": "view"
+    },
+    {
+      "name": "douban",
+      "title": "douban",
+      "description": "watch douban zuoye info",
+      "mode": "view"
     }
   ],
   "dependencies": {

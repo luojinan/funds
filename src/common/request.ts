@@ -1,7 +1,7 @@
 import { API_FUND_DETAIL, CACHE_KEY_FUNDLIST, defaultWatchFundList } from "./const";
 import fetch from "node-fetch";
 import { FundData } from "../types";
-import { getCache, isCloseTime, setCache } from "./utils";
+import { getCache, getInfoByStr, getMdByRegex, isCloseTime, setCache } from "./utils";
 import { Toast, showToast } from "@raycast/api";
 
 // TODO: 提供刷新按钮
@@ -29,6 +29,39 @@ export const getFundListWithCache = async () => {
     data.sort((a, b) => +a.expectGrowth - (+b.expectGrowth));
     const list = data.map(item => ({code: item.code, detail: item}))
     setCache(CACHE_KEY_FUNDLIST, list)
+    return list
+  } catch (error) {
+    console.log(error)
+    showToast({
+      style: Toast.Style.Failure,
+      title: '接口加载失败',
+    })
+    return []
+  }
+}
+
+// const api = "http://new.xianbao.fun/douban-maizu/2352196.html";
+export const getHtmlStr = (url: string) =>{
+  return fetch(url).then((resp) => {
+    return resp.text();
+  });
+}
+
+
+export const getZoyeList = async () => {
+  const url = 'http://new.xianbao.fun/category-douban-maizu/'
+  const htmlStr = await getHtmlStr(url)
+  const regex = /<ul class="new-post">.*?<\/ul>/g;
+  const md = getMdByRegex(htmlStr, regex)
+  const list = md.split('\n')
+  const res = list.map(item => getInfoByStr(item))
+  return res
+}
+
+export const getZoyeListWithCache = async () => {
+  // TODO: 判断缓存
+  try {
+    const list = await getZoyeList()
     return list
   } catch (error) {
     console.log(error)
