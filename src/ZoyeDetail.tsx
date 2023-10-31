@@ -46,7 +46,7 @@ export default function Command({ path, title }) {
     return `# ${title} \n ${date}${content}`
   }
   const getComment = (htmlStr) => {
-    let regex = /<div class="c-neirong">(.*?)<\/div>/g; // 匹配 <div class="c-neirong">内容</div>
+    let regex = /<div class="c-neirong">(.*?)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
     let matches = htmlStr.matchAll(regex);
     const list = []
     for (let match of matches) {
@@ -54,7 +54,6 @@ export default function Command({ path, title }) {
       let content = match[1].replace(filterText, "");
       
       if(content) {
-        console.log(content);
         let regex = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/gi; // 匹配<img>标签以及其src属性的值
         let matches = content.match(regex) || []; // 获取所有匹配的<img>标签
 
@@ -65,7 +64,10 @@ export default function Command({ path, title }) {
         });
 
         let result = content.replace(regex, ''); // 移除匹配到的<img>标签
-        list.push({text: result, icon: srcValues})
+        if(result !== 'd') {
+          console.log(result);
+          list.push({text: result, icon: srcValues})
+        }
       }
     }
     return list
