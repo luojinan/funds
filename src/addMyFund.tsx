@@ -1,7 +1,7 @@
 import { Detail } from "@raycast/api";
 import { useEffect, useState } from "react";
 import fetch from "node-fetch";
-import { html2Markdown } from '@inkdropapp/html2markdown'
+import { html2Markdown } from "@inkdropapp/html2markdown";
 
 export default function Command() {
   const [article, setArticle] = useState("");

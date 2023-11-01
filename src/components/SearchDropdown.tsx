@@ -3,9 +3,9 @@ import { List } from "@raycast/api";
 export type OptionListType = { id: string; name: string };
 
 interface SearchDropdownProp {
-  optionList: OptionListType[]
-  onChange: (newValue: string) => void
-  title: string
+  optionList: OptionListType[];
+  onChange: (newValue: string) => void;
+  title: string;
 }
 
 function SearchDropdown(props: SearchDropdownProp) {
@@ -26,4 +26,4 @@ function SearchDropdown(props: SearchDropdownProp) {
   );
 }
 
-export default SearchDropdown
+export default SearchDropdown;

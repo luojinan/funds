@@ -18,32 +18,32 @@ export default function Command() {
   const [isLoading, setIsLoading] = useState(true);
 
   const getTagList = (fundItem: FundItem) => {
-    if(!fundItem.detail) return []
-    const tagKeys = ['dayGrowth','expectGrowth'] as const
-    const tagList = tagKeys.map(key=>({
+    if (!fundItem.detail) return [];
+    const tagKeys = ["dayGrowth", "expectGrowth"] as const;
+    const tagList = tagKeys.map((key) => ({
       tag: {
-        value: `${key === 'expectGrowth'?'估':''}${fundItem.detail?.[key]}%`,
+        value: `${key === "expectGrowth" ? "估" : ""}${fundItem.detail?.[key]}%`,
         color: isDown(fundItem.detail?.[key]) ? Color.Green : Color.Red,
       },
-    }))
-    const hasButInWorthItem = defaultWatchFundList.find(item=> fundItem.code === item.code && !!item.buyinWorth)
-    if(hasButInWorthItem) {
-      const res = getUpDownPercent({newWorth: fundItem.detail.expectWorth, oldWorth: hasButInWorthItem.buyinWorth})
+    }));
+    const hasButInWorthItem = defaultWatchFundList.find((item) => fundItem.code === item.code && !!item.buyinWorth);
+    if (hasButInWorthItem) {
+      const res = getUpDownPercent({ newWorth: fundItem.detail.expectWorth, oldWorth: hasButInWorthItem.buyinWorth });
       tagList.push({
         tag: {
           value: `${res}%`,
           color: isDown(res) ? Color.Green : Color.Red,
-        }
-      })
+        },
+      });
     }
-    return tagList
-  }
+    return tagList;
+  };
 
   useEffect(() => {
     (async () => {
-      const list = await getFundListWithCache()
-      setFundList(list)
-      setIsLoading(false)
+      const list = await getFundListWithCache();
+      setFundList(list);
+      setIsLoading(false);
     })();
   }, []);
 
