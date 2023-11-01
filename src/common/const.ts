@@ -1,3 +1,5 @@
+import { OptionListType } from "../components/SearchDropdown";
+
 export const defaultWatchFundList = [
   {code: '004424', buyinWorth: 1.9262, watchWorth: ''},
   {code: '000968', buyinWorth: 0.9195, watchWorth: ''},
@@ -32,3 +34,24 @@ export const API_FUND_DETAIL = `${HOST}/fund/detail/list?startDate=${currentDate
 
 
 export const CACHE_KEY_FUNDLIST = 'fund-list'
+
+export const channelList: OptionListType[] = [
+  { id: "douban-maizu", name: "豆瓣买组" },
+  { id: "douban-maolife", name: "豆瓣爱猫生活" },
+  { id: "douban", name: "豆瓣" },
+  { id: "all", name: "所有" },
+];
+
+export const ICON_MAP = new Map([
+  ['kuan','202311011533694'],
+  ['weibo','202311011534678'],
+  ['zuankeba','202311011534777'],
+  ['xiaodigu','202311011541249'],
+  ['xinzuanba','202311011534044'],
+  ['douban-maizu','202311011529755'],
+  ['douban-maolife','202311011535797'],
+  ['douban-pinzu','202311011533345'],
+  ['douban-fazu','202311011537275'],
+  ['douban-gouzu','202311011537007'],
+  ['douban-maobathtub','202311011535797'],
+])

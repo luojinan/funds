@@ -1,5 +1,6 @@
 import { Cache } from "@raycast/api"
 import { html2Markdown } from '@inkdropapp/html2markdown'
+import { ICON_MAP } from "./const"
 
 const cache = new Cache()
 
@@ -100,4 +101,17 @@ export const getInfoByStr = (input: string): any => {
   }
 
   return {}; // 如果未找到匹配项，返回null或其他适当的错误处理
+}
+
+export const getIconUrl = (path: string) =>{
+  if(!path) return ''
+  const regex = /\/([^/]+)\//g;
+  const [item] = path.match(regex) || [];
+  let pathKey = ''
+  if (item) {
+    pathKey = item.replace(/\//g, '');
+  }
+  if(!pathKey) return ''
+  const iconId = ICON_MAP.get(pathKey)
+  return `https://kingan-md-img.oss-cn-guangzhou.aliyuncs.com/blog${iconId}.png`
 }

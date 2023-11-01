@@ -47,9 +47,12 @@ export const getHtmlStr = (url: string) =>{
   });
 }
 
-
-export const getZoyeList = async () => {
-  const url = 'http://new.xianbao.fun/category-douban-maizu/'
+export const getZoyeList = async (channel: string) => {
+  const host = 'http://new.xianbao.fun'
+  let url = host
+  if(channel !== 'all') {
+    url = `${host}/category-${channel}/`
+  }
   const htmlStr = await getHtmlStr(url)
   const regex = /<ul class="new-post">.*?<\/ul>/g;
   const md = getMdByRegex(htmlStr, regex)
@@ -58,10 +61,10 @@ export const getZoyeList = async () => {
   return res
 }
 
-export const getZoyeListWithCache = async () => {
+export const getZoyeListWithCache = async (channel: string) => {
   // TODO: 判断缓存
   try {
-    const list = await getZoyeList()
+    const list = await getZoyeList(channel)
     return list
   } catch (error) {
     console.log(error)
