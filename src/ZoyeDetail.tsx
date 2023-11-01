@@ -64,7 +64,7 @@ export default function Command({ path, title }) {
         });
 
         const result = content.replace(regex, ""); // 移除匹配到的<img>标签
-        if (result !== "d") {
+        if (!["d", "D", "牛", "，"].includes(result)) {
           console.log(result);
           list.push({ text: result, icon: srcValues });
         }
@@ -72,6 +72,17 @@ export default function Command({ path, title }) {
     }
     return list;
   };
+
+  const test = (str: string) => {
+    const regex = /\*\*原文地址：\*\*\[(.*?)\]\((.*?)\)/;
+    const match = str.match(regex);
+    if (match) {
+      const content = match[1];
+      return str.replace(regex, `原文地址: ${content}`).replace('智能AI助手提醒您','智能AI助手提醒您(这是😡💢返利链接)');
+    } else {
+      return str;
+    }
+  }
 
   // TODO: 1. 评论面板 2. 打开链接 3. 复制内容
   useEffect(() => {
@@ -84,7 +95,7 @@ export default function Command({ path, title }) {
       const filterText2 =
         "**版权声明：**本快照抓取源于网络，临时存储未经验证，请自行甄别，谨防受骗！如有侵权、不良信息请第一时间举报或联系我删除！";
       const resMd = dealMdUser(
-        dealMdImgSize(markdownString.replace(filterText1, "").replace(filterText2, "").replace(/d{2,}/g, ""))
+        dealMdImgSize(markdownString.replace(filterText1, "").replace(filterText2, "").replace(/d{2,}/g, "").replace(/\n{3,}/g, '\n\n').replace(/\n+$/, ''))
       );
       const url = getDLink(resMd);
       setDLink(url);
@@ -98,7 +109,7 @@ export default function Command({ path, title }) {
       markdown={article}
       actions={
         <ActionPanel title="Game controls">
-          <Action title="Copy Md" shortcut={{ modifiers: ["cmd"], key: "c" }} onAction={() => onCopy(article)} />
+          <Action title="Copy Md" shortcut={{ modifiers: ["cmd"], key: "c" }} onAction={() => onCopy(test(article))} />
           <Action title="Copy Link" shortcut={{ modifiers: ["cmd"], key: "x" }} onAction={() => onCopy(link)} />
           <Action
             title="Copy DLink"
