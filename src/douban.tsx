@@ -13,6 +13,7 @@ export default function Command() {
 
   const onChannelChange = async (channel: string) => {
     const list = await getZoyeListWithCache(channel);
+    // TODO: 星标商品 置顶并标红
     setList(list);
     setIsLoading(false);
   };
@@ -31,6 +32,7 @@ export default function Command() {
           actions={
             <ActionPanel>
               <Action.Push title="Detail Info" target={<ZoyeDetail path={item.path} title={item.title} />} />
+              {/* TODO: 复制列表 */}
             </ActionPanel>
           }
         />

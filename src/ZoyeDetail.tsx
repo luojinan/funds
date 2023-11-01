@@ -43,7 +43,7 @@ export default function Command({ path, title }) {
     const regex = /\d{4}年\d{1,2}月\d{1,2}日\s\d{1,2}:\d{2}/;
     const [date] = text.match(regex) || [];
     const [, content] = text.split("[举报](javascript:;)");
-    return `# ${title} \n ${date}${content}`;
+    return `${date}${content}`;
   };
   const getComment = (htmlStr) => {
     const regex = /<div class="c-neirong">(.*?)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
@@ -78,9 +78,9 @@ export default function Command({ path, title }) {
     const match = str.match(regex);
     if (match) {
       const content = match[1];
-      return str.replace(regex, `原文地址: ${content}`).replace('智能AI助手提醒您','智能AI助手提醒您(这是😡💢返利链接)');
+      return `${title}\n${str.replace(regex, `原文地址: ${content}`)}`;
     } else {
-      return str;
+      return `${title}\n${str}`;
     }
   }
 
@@ -95,7 +95,7 @@ export default function Command({ path, title }) {
       const filterText2 =
         "**版权声明：**本快照抓取源于网络，临时存储未经验证，请自行甄别，谨防受骗！如有侵权、不良信息请第一时间举报或联系我删除！";
       const resMd = dealMdUser(
-        dealMdImgSize(markdownString.replace(filterText1, "").replace(filterText2, "").replace(/d{2,}/g, "").replace(/\n{3,}/g, '\n\n').replace(/\n+$/, ''))
+        dealMdImgSize(markdownString.replace(filterText1, "").replace(filterText2, "").replace(/d{2,}/g, "").replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '').replace(/https(\\)?:\/\/(u|s)\./g,'(😡💢返利链接)'))
       );
       const url = getDLink(resMd);
       setDLink(url);
@@ -107,6 +107,7 @@ export default function Command({ path, title }) {
   return (
     <Detail
       markdown={article}
+      navigationTitle={commentList.length ? `${title}(${commentList.length}评论)` : title}
       actions={
         <ActionPanel title="Game controls">
           <Action title="Copy Md" shortcut={{ modifiers: ["cmd"], key: "c" }} onAction={() => onCopy(test(article))} />
