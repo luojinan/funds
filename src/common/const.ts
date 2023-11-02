@@ -34,7 +34,9 @@ export const API_FUND_DETAIL = `${HOST}/fund/detail/list?startDate=${currentDate
 
 export const CACHE_KEY_FUNDLIST = "fund-list";
 
-export const NOT_NEED_LIST = ["精油", "精华", "香水", "车走", "面霜", "申删", "母婴", "隔离", "美瞳", "【删】", "月抛", "腮红"];
+export const XIANBAO_HOST = "http://new.xianbao.fun"
+
+export const NOT_NEED_LIST = ["精油", "精华", "香水", "车走", "面霜", "申删", "母婴", "隔离", "美瞳", "【删】", "月抛", "腮红", "🚗走"];
 
 export const channelList: OptionListType[] = [
   { id: "douban-maizu", name: "豆瓣买组" },

@@ -1,9 +1,9 @@
-import { Action, ActionPanel, List } from "@raycast/api";
+import { Action, ActionPanel, Clipboard, List, Toast, showToast } from "@raycast/api";
 import { useState } from "react";
 import { getZoyeListWithCache } from "./common/request";
 import ZoyeDetail from "./ZoyeDetail";
 import SearchDropdown from "./components/SearchDropdown";
-import { channelList } from "./common/const";
+import { XIANBAO_HOST, channelList } from "./common/const";
 import { getIconUrl } from "./common/utils";
 import type { ZoYeItem } from "./common/utils";
 
@@ -16,6 +16,19 @@ export default function Command() {
     // TODO: 星标商品 置顶并标红
     setList(list);
     setIsLoading(false);
+  };
+
+  const onCopy = (text) => {
+    if (!text) {
+      return showToast({
+        title: "复制失败",
+        style: Toast.Style.Failure,
+      });
+    }
+    Clipboard.copy(text);
+    showToast({
+      title: "复制成功",
+    });
   };
 
   return (
@@ -32,7 +45,11 @@ export default function Command() {
           actions={
             <ActionPanel>
               <Action.Push title="Detail Info" target={<ZoyeDetail path={item.path} title={item.title} />} />
-              {/* TODO: 复制列表 */}
+              <Action
+                title="Copy List"
+                shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
+                onAction={() => onCopy(list.map(({title, path}, index)=>`${index+1}. ${title}: ${XIANBAO_HOST}${path}`).join('\n\n'))}
+              />
             </ActionPanel>
           }
         />

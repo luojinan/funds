@@ -1,4 +1,4 @@
-import { API_FUND_DETAIL, CACHE_KEY_FUNDLIST, NOT_NEED_LIST, defaultWatchFundList } from "./const";
+import { API_FUND_DETAIL, CACHE_KEY_FUNDLIST, NOT_NEED_LIST, XIANBAO_HOST, defaultWatchFundList } from "./const";
 import fetch from "node-fetch";
 import { FundData } from "../types";
 import { getCache, getInfoByStr, getMdByRegex, isCloseTime, setCache } from "./utils";
@@ -41,7 +41,6 @@ export const getFundListWithCache = async () => {
   }
 };
 
-// const api = "http://new.xianbao.fun/douban-maizu/2352196.html";
 export const getHtmlStr = (url: string) => {
   return fetch(url).then((resp) => {
     return resp.text();
@@ -49,10 +48,9 @@ export const getHtmlStr = (url: string) => {
 };
 
 export const getZoyeList = async (channel: string): Promise<ZoYeItem[]> => {
-  const host = "http://new.xianbao.fun";
-  let url = host;
+  let url = XIANBAO_HOST;
   if (channel !== "all") {
-    url = `${host}/category-${channel}/`;
+    url = `${url}/category-${channel}/`;
   }
   const htmlStr = await getHtmlStr(url);
   const regex = /<ul class="new-post">.*?<\/ul>/g;

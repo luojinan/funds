@@ -1,7 +1,8 @@
-import { Detail, ActionPanel, Action, Clipboard, showToast, Toast } from "@raycast/api";
+import { Detail, ActionPanel, Action, Clipboard, showToast, Toast, open } from "@raycast/api";
 import { useEffect, useState } from "react";
 import fetch from "node-fetch";
 import { html2Markdown } from "@inkdropapp/html2markdown";
+import { XIANBAO_HOST } from "./common/const";
 
 export default function Command({ path, title }) {
   const [article, setArticle] = useState("");
@@ -9,7 +10,7 @@ export default function Command({ path, title }) {
   const [link, setLink] = useState("");
   const [dLink, setDLink] = useState("");
   const getDetail = () => {
-    const api = `http://new.xianbao.fun${path}`;
+    const api = `${XIANBAO_HOST}${path}`;
     setLink(api);
     return fetch(api).then((item) => {
       return item.text();
@@ -77,14 +78,13 @@ export default function Command({ path, title }) {
     const regex = /\*\*原文地址：\*\*\[(.*?)\]\((.*?)\)/;
     const match = str.match(regex);
     if (match) {
-      const content = match[1];
-      return `${title}\n${str.replace(regex, `原文地址: ${content}`)}`;
+      return `${title}\n${str.replace(regex, `原文地址: ${dLink}`)}`;
     } else {
       return `${title}\n${str}`;
     }
   }
 
-  // TODO: 1. 评论面板 2. 打开链接 3. 复制内容
+  // TODO: 1. 评论面板
   useEffect(() => {
     (async () => {
       const res = await getDetail();
@@ -111,12 +111,17 @@ export default function Command({ path, title }) {
       actions={
         <ActionPanel title="Game controls">
           <Action title="Copy Md" shortcut={{ modifiers: ["cmd"], key: "c" }} onAction={() => onCopy(test(article))} />
-          <Action title="Copy Link" shortcut={{ modifiers: ["cmd"], key: "x" }} onAction={() => onCopy(link)} />
+          <Action
+            title="Open DLink"
+            shortcut={{ modifiers: ["cmd"], key: "o" }}
+            onAction={() => open(dLink)}
+          />
           <Action
             title="Copy DLink"
             shortcut={{ modifiers: ["cmd"], key: "d" }}
             onAction={() => onCopy(`${title} ${dLink}`)}
           />
+          <Action title="Copy XianBao Link" shortcut={{ modifiers: ["cmd"], key: "x" }} onAction={() => onCopy(link)} />
         </ActionPanel>
       }
       metadata={
