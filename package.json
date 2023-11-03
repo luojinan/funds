@@ -14,15 +14,21 @@
       "mode": "view"
     },
     {
-      "name": "addMyFund",
-      "title": "addMyFund",
-      "description": "add funds info",
+      "name": "zai",
+      "title": "zai",
+      "description": "zhuan chatGPT",
       "mode": "view"
     },
     {
       "name": "douban",
       "title": "douban",
       "description": "watch douban zuoye info",
+      "mode": "view"
+    },
+    {
+      "name": "addMyFund",
+      "title": "addMyFund",
+      "description": "add funds info",
       "mode": "view"
     }
   ],

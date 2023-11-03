@@ -82,7 +82,7 @@ export default function Command({ path, title }) {
     } else {
       return `${title}\n${str}`;
     }
-  }
+  };
 
   // TODO: 1. 评论面板
   useEffect(() => {
@@ -95,7 +95,15 @@ export default function Command({ path, title }) {
       const filterText2 =
         "**版权声明：**本快照抓取源于网络，临时存储未经验证，请自行甄别，谨防受骗！如有侵权、不良信息请第一时间举报或联系我删除！";
       const resMd = dealMdUser(
-        dealMdImgSize(markdownString.replace(filterText1, "").replace(filterText2, "").replace(/d{2,}/g, "").replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '').replace(/https(\\)?:\/\/(u|s)\./g,'(😡💢返利链接)'))
+        dealMdImgSize(
+          markdownString
+            .replace(filterText1, "")
+            .replace(filterText2, "")
+            .replace(/d{2,}/g, "")
+            .replace(/\n{3,}/g, "\n\n")
+            .replace(/\n+$/, "")
+            .replace(/https(\\)?:\/\/(u|s)\./g, "(😡💢返利链接)")
+        )
       );
       const url = getDLink(resMd);
       setDLink(url);
@@ -111,11 +119,7 @@ export default function Command({ path, title }) {
       actions={
         <ActionPanel title="Game controls">
           <Action title="Copy Md" shortcut={{ modifiers: ["cmd"], key: "c" }} onAction={() => onCopy(test(article))} />
-          <Action
-            title="Open DLink"
-            shortcut={{ modifiers: ["cmd"], key: "o" }}
-            onAction={() => open(dLink)}
-          />
+          <Action title="Open DLink" shortcut={{ modifiers: ["cmd"], key: "o" }} onAction={() => open(dLink)} />
           <Action
             title="Copy DLink"
             shortcut={{ modifiers: ["cmd"], key: "d" }}

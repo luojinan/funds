@@ -1,4 +1,11 @@
-import { API_FUND_DETAIL, CACHE_KEY_FUNDLIST, NOT_NEED_LIST, XIANBAO_HOST, defaultWatchFundList } from "./const";
+import {
+  AI_HOST,
+  API_FUND_DETAIL,
+  CACHE_KEY_FUNDLIST,
+  NOT_NEED_LIST,
+  XIANBAO_HOST,
+  defaultWatchFundList,
+} from "./const";
 import fetch from "node-fetch";
 import { FundData } from "../types";
 import { getCache, getInfoByStr, getMdByRegex, isCloseTime, setCache } from "./utils";
@@ -99,3 +106,37 @@ export const getZoyeListWithCache = async (channel: string) => {
 //   console.error(error);
 // }
 // }
+
+export const promptAI = async (prompt: string, { callback, done }: { callback: (any) => void; done?: () => void }) => {
+  const response = await fetch(AI_HOST, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie:
+        "sso_uid=608863335; sso_code=648b6cdddfbd760abf0787e8b9118485; sso_company_code=0; kid=1630422302413820929",
+    },
+    body: JSON.stringify({
+      options: { parentMessageId: "chatcmpl-8GMcVvSSCXxIyxNLukW91mDcorSiG" },
+      prompt,
+    }),
+  });
+  if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
+
+  if (response.body) {
+    for await (const chunk of response.body) {
+      if (chunk) {
+        const str = new TextDecoder().decode(chunk as ArrayBuffer);
+        try {
+          const res = JSON.parse(`${str}`);
+          callback(res);
+          if (res.detail.choices[0].finish_reason === "stop") {
+            console.log("回答结束");
+            done && done();
+          }
+        } catch (error) {
+          console.log(str);
+        }
+      }
+    }
+  }
+};

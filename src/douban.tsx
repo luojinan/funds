@@ -12,6 +12,7 @@ export default function Command() {
   const [isLoading, setIsLoading] = useState(true);
 
   const onChannelChange = async (channel: string) => {
+    setIsLoading(true);
     const list = await getZoyeListWithCache(channel);
     // TODO: 星标商品 置顶并标红
     setList(list);
@@ -48,7 +49,11 @@ export default function Command() {
               <Action
                 title="Copy List"
                 shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
-                onAction={() => onCopy(list.map(({title, path}, index)=>`${index+1}. ${title}: ${XIANBAO_HOST}${path}`).join('\n\n'))}
+                onAction={() =>
+                  onCopy(
+                    list.map(({ title, path }, index) => `${index + 1}. ${title}: ${XIANBAO_HOST}${path}`).join("\n\n")
+                  )
+                }
               />
             </ActionPanel>
           }

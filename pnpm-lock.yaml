@@ -14,7 +14,7 @@ specifiers:
 
 dependencies:
   '@inkdropapp/html2markdown': 3.2.1
-  '@raycast/api': 1.55.2
+  '@raycast/api': 1.55.2_2cx2ipqrn5f7svdjipmu7pbevq
   node-fetch: 3.3.1
 
 devDependencies:
@@ -134,10 +134,13 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@raycast/api/1.55.2:
+  /@raycast/api/1.55.2_2cx2ipqrn5f7svdjipmu7pbevq:
     resolution: {integrity: sha512-Gct1bxRYNJkGcE1qfZoAE+FDByj2/wXOowFK1ORdEsbjP5YSeVK9mDsb/Z7DFzVyLQ5jZn4tNpF5sEvsVkgVwQ==}
     hasBin: true
     requiresBuild: true
+    peerDependencies:
+      '@types/node': 18.8.3
+      '@types/react': 18.0.9
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -186,7 +189,7 @@ packages:
     peerDependencies:
       '@raycast/api': '>=1.52.0'
     dependencies:
-      '@raycast/api': 1.55.2
+      '@raycast/api': 1.55.2_2cx2ipqrn5f7svdjipmu7pbevq
       content-type: 1.0.5
       cross-fetch: 3.1.8
       dequal: 2.0.3
