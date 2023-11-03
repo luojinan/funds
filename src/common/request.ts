@@ -60,7 +60,7 @@ export const getZoyeList = async (channel: string): Promise<ZoYeItem[]> => {
     url = `${url}/category-${channel}/`;
   }
   const htmlStr = await getHtmlStr(url);
-  const regex = /<ul class="new-post">.*?<\/ul>/g;
+  const regex = /<ul class="new-post">([\s\S]*)<\/ul>/g;
   const md = getMdByRegex(htmlStr, regex);
   const list = md.split("\n");
   const res: ZoYeItem[] = [];

@@ -14,7 +14,7 @@ export default function Command() {
   useEffect(() => {
     (async () => {
       const res = await test();
-      const regex = /<article.*?<\/article>/g;
+      const regex = /<article([\s\S]*)<\/article>/g;
       const [matches] = res.match(regex) || [];
       const markdownString = html2Markdown(matches);
       console.log(markdownString);

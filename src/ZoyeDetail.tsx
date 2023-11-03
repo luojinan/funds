@@ -31,7 +31,7 @@ export default function Command({ path, title }) {
     });
   };
   const getDLink = (text: string) => {
-    const regex = /\*\*原文地址：\*\*\[(.*?)\]/;
+    const regex = /\*\*原文地址：\*\*\[([\s\S]*)\]/;
     const [, match] = text.match(regex) || [];
     return match;
   };
@@ -47,7 +47,7 @@ export default function Command({ path, title }) {
     return `${date}${content}`;
   };
   const getComment = (htmlStr) => {
-    const regex = /<div class="c-neirong">(.*?)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
+    const regex = /<div class="c-neirong">([\s\S]*)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
     const matches = htmlStr.matchAll(regex);
     const list = [];
     for (const match of matches) {
@@ -75,7 +75,7 @@ export default function Command({ path, title }) {
   };
 
   const test = (str: string) => {
-    const regex = /\*\*原文地址：\*\*\[(.*?)\]\((.*?)\)/;
+    const regex = /\*\*原文地址：\*\*\[([\s\S]*)\]\(([\s\S]*)\)/;
     const match = str.match(regex);
     if (match) {
       return `${title}\n${str.replace(regex, `原文地址: ${dLink}`)}`;
@@ -88,7 +88,7 @@ export default function Command({ path, title }) {
   useEffect(() => {
     (async () => {
       const res = await getDetail();
-      const regex = /<article.*?<\/article>/g;
+      const regex = /<article([\s\S]*)<\/article>/g;
       const [matches] = res.match(regex) || [];
       const markdownString = html2Markdown(matches);
       const filterText1 = "复制文案重新抓取";

@@ -69,7 +69,7 @@ export const getUpDownPercent = ({ newWorth, oldWorth }: { newWorth: number; old
  * @returns
  */
 export const removeTop = (htmlStr: string) => {
-  const regex = /<li class="article-list top">.*?<\/li>/g;
+  const regex = /<li class="article-list top">([\s\S]*)<\/li>/g;
   const result = htmlStr.replace(regex, "");
   return result;
 };
@@ -88,7 +88,7 @@ export interface ZoYeItem {
 }
 
 export const getInfoByStr = (input: string): ZoYeItem => {
-  const regex = /- (\d{2}:\d{2})\*\*(.*?)\]\((.*?)\)/;
+  const regex = /- (\d{2}:\d{2})\s*\*\*([\s\S]*)\]\(([\s\S]*)\)/;
   const match = input.match(regex);
 
   if (match) {
