@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Clipboard, List, Toast, showToast } from "@raycast/api";
+import { Action, ActionPanel, Clipboard, List, Toast, open, showToast } from "@raycast/api";
 import { useState } from "react";
 import { getZoyeListWithCache } from "./common/request";
 import ZoyeDetail from "./ZoyeDetail";
@@ -46,6 +46,7 @@ export default function Command() {
           actions={
             <ActionPanel>
               <Action.Push title="Detail Info" target={<ZoyeDetail path={item.path} title={item.title} />} />
+              <Action title="Open DLink" shortcut={{ modifiers: ["cmd"], key: "o" }} onAction={() => open(`${XIANBAO_HOST}${item.path}`)} />
               <Action
                 title="Copy List"
                 shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
