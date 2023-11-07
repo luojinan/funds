@@ -30,6 +30,12 @@
       "title": "addMyFund",
       "description": "add funds info",
       "mode": "view"
+    },
+    {
+      "name": "protable",
+      "title": "protable",
+      "description": "protable tools",
+      "mode": "view"
     }
   ],
   "dependencies": {

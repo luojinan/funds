@@ -76,8 +76,17 @@ export const removeTop = (htmlStr: string) => {
 
 export const getMdByRegex = (str: string, regex) => {
   const [matches] = str.match(regex) || [];
-  const htmlStr = removeTop(matches);
-  const markdownString = html2Markdown(htmlStr);
+  if(!matches) {
+    console.log('获取ul dom字符串失败')
+  }
+  // const htmlStr = removeTop(matches);
+  // if(!htmlStr) {
+  //   console.log('移除置顶失败')
+  // }
+  const markdownString = html2Markdown(matches);
+  if(!markdownString) {
+    console.log('ul转md失败')
+  }
   return markdownString;
 };
 

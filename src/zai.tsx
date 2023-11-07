@@ -1,4 +1,4 @@
-import { Action, ActionPanel, List } from "@raycast/api";
+import { Action, ActionPanel, Clipboard, List, Toast, showToast } from "@raycast/api";
 import { useEffect, useReducer, useState } from "react";
 import { promptAI } from "./common/request";
 import { getCache, setCache } from "./common/utils";
@@ -42,12 +42,28 @@ export default function Command() {
     });
   };
 
+  const onCopy = (text) => {
+    if (!text) {
+      return showToast({
+        title: "复制失败",
+        style: Toast.Style.Failure,
+      });
+    }
+    Clipboard.copy(text);
+    showToast({
+      title: "复制成功",
+      message: text,
+    });
+  };
+
   useEffect(() => {
     const [answer] = list;
     if (answer?.detail?.choices[0]?.finish_reason === "stop") {
       setCache(CACHE_KEY_ZAI, list);
     }
   }, [list]);
+
+  // menu： 推荐以下表示`商务信息`、`商场特点`的变量名，并提供英英注释、例句和词组，这些都要求有对应的中文翻译，同时要求提供一些类似含义的同义词或相关词汇，以帮助我扩展我的英语词汇量
 
   return (
     <List
@@ -68,6 +84,7 @@ export default function Command() {
             actions={
               <ActionPanel>
                 <Action title="Go" shortcut={{ modifiers: ["cmd"], key: "g" }} onAction={getAnswer} />
+                <Action title="Copy" shortcut={{ modifiers: ["cmd", "shift"], key: "c" }} onAction={()=>onCopy(item.text)} />
               </ActionPanel>
             }
           />

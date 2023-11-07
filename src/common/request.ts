@@ -60,6 +60,9 @@ export const getZoyeList = async (channel: string): Promise<ZoYeItem[]> => {
     url = `${url}/category-${channel}/`;
   }
   const htmlStr = await getHtmlStr(url);
+  if(!htmlStr) {
+    console.log('获取html失败')
+  }
   const regex = /<ul class="new-post">([\s\S]*)<\/ul>/g;
   const md = getMdByRegex(htmlStr, regex);
   const list = md.split("\n");
@@ -113,7 +116,7 @@ export const promptAI = async (prompt: string, { callback, done }: { callback: (
     headers: {
       "Content-Type": "application/json",
       Cookie:
-        "sso_uid=608863335; sso_code=648b6cdddfbd760abf0787e8b9118485; sso_company_code=0; kid=1630422302413820929",
+        "sso_uid=608863335; sso_code=f8b7b923e82a86d298ed2691f0c87ddc; sso_company_code=0; kid=1630422302413820929",
     },
     body: JSON.stringify({
       options: { parentMessageId: "chatcmpl-8GMcVvSSCXxIyxNLukW91mDcorSiG" },
