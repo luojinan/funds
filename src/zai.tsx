@@ -80,11 +80,13 @@ export default function Command() {
           <List.Item
             key={index}
             title={item?.prompt || ""}
-            detail={<List.Item.Detail markdown={item.text} />}
+            // 🤔 CommonMark render code with js/jsx/ts/tsx will change `'` to `&#x27;`
+            // 🤯 why other developer ignore this issue , thy can fixed it ? by what?
+            detail={<List.Item.Detail markdown={item.text?.replaceAll('```js', '```')} />}
             actions={
               <ActionPanel>
                 <Action title="Go" shortcut={{ modifiers: ["cmd"], key: "g" }} onAction={getAnswer} />
-                <Action title="Copy" shortcut={{ modifiers: ["cmd", "shift"], key: "c" }} onAction={()=>onCopy(item.text)} />
+                <Action title="Copy" shortcut={{ modifiers: ["cmd", "shift"], key: "c" }} onAction={() => onCopy(item.text)} />
               </ActionPanel>
             }
           />
