@@ -1,8 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "funds",
-  "title": "funds",
-  "description": "watch funds info",
+  "name": "antools",
+  "title": "AnTools",
+  "description": "some tools for me",
   "icon": "command-icon.png",
   "author": "luojinan",
   "license": "MIT",

@@ -1,5 +1,7 @@
 # ProTable
 
+简单的脚本工具使用 [script-commands - github](https://github.com/raycast/script-commands) 优于使用插件 extends
+
 表格项以顿号`、`分隔，生成非搜索项的 `ProTable` 列
 
 ![](https://kingan-md-img.oss-cn-guangzhou.aliyuncs.com/blog202311071916398.png)

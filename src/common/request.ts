@@ -116,7 +116,7 @@ export const promptAI = async (prompt: string, { callback, done }: { callback: (
     headers: {
       "Content-Type": "application/json",
       Cookie:
-        "sso_uid=608863335; sso_code=f8b7b923e82a86d298ed2691f0c87ddc; sso_company_code=0; kid=1630422302413820929",
+        "sso_uid=608863335; sso_code=5ec6905069c06eda2996c6772beb18e2; sso_company_code=0; kid=1630422302413820929",
     },
     body: JSON.stringify({
       options: { parentMessageId: "chatcmpl-8GMcVvSSCXxIyxNLukW91mDcorSiG" },

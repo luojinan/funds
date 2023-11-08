@@ -1,8 +1,9 @@
-import { Action, ActionPanel, Clipboard, List, Toast, showToast } from "@raycast/api";
+import { Action, ActionPanel, List } from "@raycast/api";
 import { useEffect, useReducer, useState } from "react";
 import { promptAI } from "./common/request";
 import { getCache, setCache } from "./common/utils";
 import { CACHE_KEY_ZAI } from "./common/const";
+import { ActionCopy } from "./components/ActionCopy";
 
 interface AnswerType {
   prompt?: string;
@@ -33,7 +34,6 @@ export default function Command() {
   const [list, setList] = useReducer(reducer, getCache(CACHE_KEY_ZAI) || []);
 
   const getAnswer = async () => {
-    // list.unshift()
     setList({ type: "add", res: { prompt: searchText, text: "思考中" } });
     promptAI(searchText, {
       callback: (answer) => {
@@ -42,22 +42,8 @@ export default function Command() {
     });
   };
 
-  const onCopy = (text) => {
-    if (!text) {
-      return showToast({
-        title: "复制失败",
-        style: Toast.Style.Failure,
-      });
-    }
-    Clipboard.copy(text);
-    showToast({
-      title: "复制成功",
-      message: text,
-    });
-  };
-
   useEffect(() => {
-    const [answer] = list;
+    const [answer]  = list;
     if (answer?.detail?.choices[0]?.finish_reason === "stop") {
       setCache(CACHE_KEY_ZAI, list);
     }
@@ -82,11 +68,11 @@ export default function Command() {
             title={item?.prompt || ""}
             // 🤔 CommonMark render code with js/jsx/ts/tsx will change `'` to `&#x27;`
             // 🤯 why other developer ignore this issue , thy can fixed it ? by what?
-            detail={<List.Item.Detail markdown={item.text?.replaceAll('```js', '```')} />}
+            detail={<List.Item.Detail markdown={`> **${item.prompt}**\n\n${item.text?.replace(/```(js|javascript)/g, '```')}`} />}
             actions={
               <ActionPanel>
-                <Action title="Go" shortcut={{ modifiers: ["cmd"], key: "g" }} onAction={getAnswer} />
-                <Action title="Copy" shortcut={{ modifiers: ["cmd", "shift"], key: "c" }} onAction={() => onCopy(item.text)} />
+                <Action title="Get Answer" shortcut={{ modifiers: ["cmd"], key: "g" }} onAction={getAnswer} />
+                <ActionCopy title="Copy Answer" content={item.text || ''} />
               </ActionPanel>
             }
           />
