@@ -110,16 +110,20 @@ export const getZoyeListWithCache = async (channel: string) => {
 // }
 // }
 
+// TODO: 不支持 流数据，改回普通post 的json数据
 export const promptAI = async (prompt: string, { callback, done }: { callback: (any) => void; done?: () => void }) => {
   const response = await fetch(AI_HOST, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Cookie:
-        "sso_uid=608863335; sso_code=5ec6905069c06eda2996c6772beb18e2; sso_company_code=0; kid=1630422302413820929",
+        "sso_uid=608863335; sso_code=c98456bd17523b7ee0dea61e580f7fd0; sso_company_code=0; kid=1630422302413820929",
     },
     body: JSON.stringify({
-      options: { parentMessageId: "chatcmpl-8GMcVvSSCXxIyxNLukW91mDcorSiG" },
+      options: {
+        parentMessageId: "ab4357c4-d483-4146-bbe8-6294c4369b57",
+        conversationId: "chatcmpl-8O2TY939hFjTl7j1hVuSSBI9g7UzU"
+      },
       prompt,
     }),
   });
@@ -131,13 +135,14 @@ export const promptAI = async (prompt: string, { callback, done }: { callback: (
         const str = new TextDecoder().decode(chunk as ArrayBuffer);
         try {
           const res = JSON.parse(`${str}`);
+          console.log('啊', str)
           callback(res);
-          if (res.detail.choices[0].finish_reason === "stop") {
+          if (res.status === "Success") {
             console.log("回答结束");
             done && done();
           }
         } catch (error) {
-          console.log(str);
+          console.log(error);
         }
       }
     }

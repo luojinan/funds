@@ -74,5 +74,6 @@ export const ICON_MAP = new Map([
 ]);
 
 export const CACHE_KEY_ZAI = "zai-history-list";
+export const CACHE_KEY_SSO_CODE = "zz-sso-code";
 
-export const AI_HOST = "https://chatgpt.zhuanspirit.com/api/chat-process";
+export const AI_HOST = "https://chatgpt1.zhuanspirit.com/api/chat-process";

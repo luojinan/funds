@@ -47,12 +47,20 @@ export default function Command({ path, title }) {
     return `${date}${content}`;
   };
   const getComment = (htmlStr) => {
-    const regex = /<div class="c-neirong">([\s\S]*)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
+    const regex = /<div class="c-neirong">([\s\S]*?)<\/div>/g; // 匹配 <div class="c-neirong">内容</div> TODO: 嵌套div问题
     const matches = htmlStr.matchAll(regex);
     const list = [];
     for (const match of matches) {
+      // console.log('评论区html', match[1]);
+      const [, text] = match || []
+      const yingyongRegex = /<p class="huifuneirong">(.*)<\/p>/;
+      const yingyongText = text.match(yingyongRegex);
+      let removeYingyong = text;
+      if (yingyongText) {
+        removeYingyong = yingyongText[1];
+      }
       const filterText = /(d{2,})|谢谢姐妹|滴滴|谢谢|!|！|\s/gi; // 过滤2个以上的d和谢谢
-      const content = match[1].replace(filterText, "");
+      const content = removeYingyong.replace(filterText, "");
 
       if (content) {
         const regex = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/gi; // 匹配<img>标签以及其src属性的值
@@ -66,7 +74,7 @@ export default function Command({ path, title }) {
 
         const result = content.replace(regex, ""); // 移除匹配到的<img>标签
         if (!["d", "D", "牛", "，"].includes(result)) {
-          console.log(result);
+          // console.log(result);
           list.push({ text: result, icon: srcValues });
         }
       }
@@ -84,7 +92,6 @@ export default function Command({ path, title }) {
     }
   };
 
-  // TODO: 1. 评论面板
   useEffect(() => {
     (async () => {
       const res = await getDetail();
