@@ -36,6 +36,12 @@
       "title": "protable",
       "description": "protable tools",
       "mode": "view"
+    },
+    {
+      "name": "incomeMoney",
+      "title": "incomeMoney",
+      "description": "incomeMoney tools",
+      "mode": "view"
     }
   ],
   "dependencies": {

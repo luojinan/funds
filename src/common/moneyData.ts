@@ -1,4 +1,24 @@
-export const moneyList = [{
+interface IObj {
+  time: string;
+  基本工资: number;
+  加班饭补: number;
+  提取公积金: number;
+  公积金: number;
+  医疗保险: number;
+  养老保险: number;
+  失业保险: number;
+  扣税: number;
+  房租: number;
+  事假?: number;
+}
+
+type MoneyList = IObj[]
+
+export const gotKey = ['基本工资', '加班饭补', '提取公积金'] as const
+
+export const lostKey = ['公积金', '医疗保险', '养老保险', '失业保险', '扣税', '房租', '事假'] as const
+
+export const moneyList: MoneyList = [{
   time: '2023.3',
   基本工资: 23000,
   加班饭补: 500,
