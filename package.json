@@ -42,6 +42,12 @@
       "title": "incomeMoney",
       "description": "incomeMoney tools",
       "mode": "view"
+    },
+    {
+      "name": "japanese",
+      "title": "Japanese",
+      "description": "Japanese learn",
+      "mode": "view"
     }
   ],
   "dependencies": {
