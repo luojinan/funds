@@ -100,12 +100,16 @@ export default function Command({ path, title }) {
       const markdownString = html2Markdown(matches);
       const filterText1 = "复制文案重新抓取";
       const filterText2 =
-        "**版权声明：**本快照抓取源于网络，临时存储未经验证，请自行甄别，谨防受骗！如有侵权、不良信息请第一时间举报或联系我删除！";
+        "**版权声明：**本站作为免费线报整合平台，文章快照抓取源于网络。临时存储未经验证，本站不参与任何平台活动，请自行甄别，谨防受骗！";
+      const filterText3 = "，禁止到豆瓣平台宣传/询问本站！";
+      const filterText4 = "**问答说明：**豆瓣问答数据来源于";
       const resMd = dealMdUser(
         dealMdImgSize(
           markdownString
             .replace(filterText1, "")
             .replace(filterText2, "")
+            .replace(filterText3, "")
+            .replace(filterText4, "")
             .replace(/d{2,}/g, "")
             .replace(/\n{3,}/g, "\n\n")
             .replace(/\n+$/, "")

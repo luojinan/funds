@@ -12,6 +12,9 @@ export const defaultWatchFundList = [
   { code: "340001", buyinWorth: 1.021, watchWorth: "" },
   { code: "000071", buyinWorth: 1.0312, watchWorth: "" },
   { code: "014424", buyinWorth: 0.6792, watchWorth: "" },
+  { code: "012348", buyinWorth: 0.4858, watchWorth: "" },
+  { code: "001052", buyinWorth: 0.5987, watchWorth: "" },
+  
 ]; // TODO: 表单输入，及json修改
 
 // 获取当前日期并格式化
