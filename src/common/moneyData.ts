@@ -12,6 +12,14 @@ export interface IObj {
   事假?: number;
 }
 
+interface EObj {
+  年终: number;
+}
+
+type DataObj = IObj | EObj
+
+export type MoneyList = DataObj[]
+
 export const gotKey = ['基本工资', '加班饭补', '提取公积金'] as const
 
 export const lostKey = ['公积金', '医疗保险', '养老保险', '失业保险', '扣税', '房租', '事假'] as const
