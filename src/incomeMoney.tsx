@@ -1,6 +1,7 @@
 import { Detail } from "@raycast/api";
 import { useEffect, useState } from "react";
-import { gotKey, lostKey, moneyList } from "./common/moneyData";
+import { gotKey, lostKey } from "./common/moneyData";
+import fetch from "node-fetch";
 
 const formatter = new Intl.NumberFormat();
 
@@ -11,12 +12,27 @@ function sum(arr: (number | undefined)[]) {
   }, 0)
 }
 
+const umdUrl = 'https://kingan-md-img.oss-cn-guangzhou.aliyuncs.com/data/incomeData.js'
+
+const getData = () => {
+  return fetch(umdUrl)
+  .then((res) => res.text())
+  .then((text) => {
+    const res = text.replace('window','global')
+    eval(res);
+  })
+  .catch((err) => {
+    console.error('发生错误:', err);
+  });
+}
+
 export default function Command() {
   const [incomeMoneyDetail, setIncomeMoneyDetail] = useState('');
 
   useEffect(() => {
     (async () => {
-      const test = moneyList.reduce((res, next) => {
+      await getData()
+      const test = incomeDataList.reduce((res, next) => {
         // 将 gotKey 数组映射成 gotMoneyList 数组
         const itemGotMoneyList = gotKey.map(item => next[item])
         // 将 lostKey 数组映射成 lostMoneyList 数组
@@ -33,17 +49,17 @@ export default function Command() {
         };
       }, { gotMoney: 0, lostMoney: 0 });
       const realGotMoney = test.gotMoney + test.lostMoney;
-      const timeTitle = `${moneyList[0].time} ~ ${moneyList[moneyList.length - 1].time}（月数${moneyList.length}）`
+      const timeTitle = `${incomeDataList[0].time} ~ ${incomeDataList[incomeDataList.length - 1].time}（月数${incomeDataList.length}）`
 
       setIncomeMoneyDetail(`
 ${timeTitle}
 - 至今税前总收入 ${formatter.format(test.gotMoney)}
 - 至今税金房租总支出 ${formatter.format(test.lostMoney)}
 - 至今到手总收入 ${formatter.format(realGotMoney)}
-- 至今平均到手月入 ${formatter.format(realGotMoney / moneyList.length)}
+- 至今平均到手月入 ${formatter.format(realGotMoney / incomeDataList.length)}
 
-> - 预计税前年入 ${formatter.format((test.gotMoney / moneyList.length) * 12)}
-> - 预计到手年入 ${formatter.format((realGotMoney / moneyList.length) * 12)}`);
+> - 预计税前年入 ${formatter.format((test.gotMoney / incomeDataList.length) * 12)}
+> - 预计到手年入 ${formatter.format((realGotMoney / incomeDataList.length) * 12)}`);
     })();
   }, []);
 

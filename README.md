@@ -4,7 +4,9 @@ watch funds info
 
 近半年/一年的最低值
 
-接口来源文档: https://www.doctorxiong.club/api/
+接口来源文档: <https://www.doctorxiong.club/api/>
+
+尝试走 <https://www.efunds.com.cn/fund/js_data/fi_017854.json>
 
 TODO: 新增修改自选 1.关注的净值点 2.买入的净值点
 
@@ -18,6 +20,7 @@ TODO: 找出最小的5个净值和日期，计算与当前净值的涨幅，提�
 `(.*?)` 匹配不到换行
 
 TODO:
+
 - 笔记
 - Hooks 抽离
 - 源码学习(chatGpt、mastodon)
