@@ -38,6 +38,7 @@ export const API_FUND_DETAIL = `${HOST}/fund/detail/list?startDate=${currentDate
 // export const API_FUND_LIST = `${HOST}/fund/detailfund/detail?code=`
 
 export const CACHE_KEY_FUNDLIST = "fund-list";
+export const CACHE_KEY_INCOME = "cache-income";
 
 export const XIANBAO_HOST = "http://new.xianbao.fun";
 

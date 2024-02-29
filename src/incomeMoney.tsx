@@ -1,7 +1,9 @@
-import { Detail } from "@raycast/api";
+import { Action, ActionPanel, Detail, showToast } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { gotKey, lostKey } from "./common/moneyData";
 import fetch from "node-fetch";
+import { CACHE_KEY_INCOME } from "./common/const";
+import { getCache, setCache } from "./common/utils";
 
 const formatter = new Intl.NumberFormat();
 
@@ -14,7 +16,7 @@ function sum(arr: (number | undefined)[]) {
 
 const umdUrl = 'https://kingan-md-img.oss-cn-guangzhou.aliyuncs.com/data/incomeData.js'
 
-const getData = () => {
+const getDataFetch = () => {
   return fetch(umdUrl)
   .then((res) => res.text())
   .then((text) => {
@@ -27,43 +29,63 @@ const getData = () => {
   });
 }
 
+const getData = async () => {
+  const cacheIncome = getCache(CACHE_KEY_INCOME) || [];
+  if(cacheIncome.length) {
+    showToast({
+      title: "来源缓存",
+    });
+    return cacheIncome
+  }else {
+    showToast({
+      title: "来源OSS",
+    });
+    await getDataFetch()
+    setCache(CACHE_KEY_INCOME, incomeDataList);
+    return incomeDataList
+  }
+}
+
 export default function Command() {
   const [incomeMoneyDetail, setIncomeMoneyDetail] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      await getData()
-      const test = incomeDataList.reduce((res, next) => {
-        if(!next.time) {
-          return res
-        }
-        // 将 gotKey 数组映射成 gotMoneyList 数组
-        const itemGotMoneyList = gotKey.map(item => next[item])
-        // 将 lostKey 数组映射成 lostMoneyList 数组
-        const itemLostMoneyList = lostKey.map(item => next[item])
 
-        // 计算获得的总金额
-        const gotMoney = res.gotMoney + (sum(itemGotMoneyList) || 0)
-        // 计算损失的总金额
-        const lostMoney = res.lostMoney + (sum(itemLostMoneyList) || 0)
-        // 返回包含获得金额和损失金额的对象
-        return {
-          gotMoney,
-          lostMoney,
-        };
-      }, { gotMoney: 0, lostMoney: 0 });
-      const realGotMoney = test.gotMoney + test.lostMoney;
+  const init = async () => {
+    setIsLoading(true)
+    const incomeDataRes = await getData()
+    setIsLoading(false)
+    const test = incomeDataRes.reduce((res, next) => {
+      if(!next.time) {
+        return res
+      }
+      // 将 gotKey 数组映射成 gotMoneyList 数组
+      const itemGotMoneyList = gotKey.map(item => next[item])
+      // 将 lostKey 数组映射成 lostMoneyList 数组
+      const itemLostMoneyList = lostKey.map(item => next[item])
 
-      const timeList = incomeDataList.filter(item=>!!item.time)
-      const timeTitle = `${timeList[0].time} ~ ${timeList[timeList.length - 1].time}（月数${timeList.length}）`
+      // 计算获得的总金额
+      const gotMoney = res.gotMoney + (sum(itemGotMoneyList) || 0)
+      // 计算损失的总金额
+      const lostMoney = res.lostMoney + (sum(itemLostMoneyList) || 0)
+      // 返回包含获得金额和损失金额的对象
+      return {
+        gotMoney,
+        lostMoney,
+      };
+    }, { gotMoney: 0, lostMoney: 0 });
+    const realGotMoney = test.gotMoney + test.lostMoney;
 
-      const extraIncomeList = incomeDataList.filter(item=>!item.time)
+    const timeList = incomeDataRes.filter(item=>!!item.time)
+    const timeTitle = `${timeList[0].time} ~ ${timeList[timeList.length - 1].time}（月数${timeList.length}）`
 
-      const extraIncome = extraIncomeList.reduce((extraTotal, next) => {
-        return extraTotal + next.年终
-      }, 0);
+    const extraIncomeList = incomeDataRes.filter(item=>!item.time)
 
-      setIncomeMoneyDetail(`
+    const extraIncome = extraIncomeList.reduce((extraTotal, next) => {
+      return extraTotal + next.年终
+    }, 0);
+
+    setIncomeMoneyDetail(`
 ${timeTitle}
 - 至今税前总收入 ${formatter.format(test.gotMoney)}
 - 至今税金房租总支出 ${formatter.format(test.lostMoney)}
@@ -78,9 +100,27 @@ ${timeTitle}
 > - 预计税前年入 ${formatter.format((test.gotMoney / timeList.length) * 12)}
 > - 预计到手年入 ${formatter.format((realGotMoney / timeList.length) * 12)}
 > - 年终后预计到手年入 ${formatter.format(extraIncome + ((realGotMoney / timeList.length) * 12))}`);
-    })();
+  }
+
+  useEffect(() => {
+    init()
   }, []);
 
   // TODO: 可视化图表
-  return <Detail markdown={incomeMoneyDetail} />;
+  return <Detail
+    isLoading={isLoading}
+    markdown={incomeMoneyDetail}
+    actions={
+      <ActionPanel title="Game controls">
+        <Action
+          title="Refresh"
+          shortcut={{ modifiers: ["cmd"], key: "r" }}
+          onAction={() => {
+            setCache(CACHE_KEY_INCOME, [])
+            init()
+          }}
+        />
+      </ActionPanel>
+    }
+  />;
 }
